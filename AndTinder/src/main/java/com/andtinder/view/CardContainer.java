@@ -5,13 +5,16 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
@@ -19,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
@@ -239,6 +243,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (mTopCard == null) {
@@ -279,12 +284,20 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 pointerIndex = event.findPointerIndex(mActivePointerId);
                 x = event.getX(pointerIndex);
                 y = event.getY(pointerIndex);
-
+                WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+                Display display = wm.getDefaultDisplay();
+                if((mTopCard.getWidth()/2+mTopCard.getX())>2*(display.getWidth()/3)){
+                    System.out.println("green");
+                    mTopCard.setBackgroundColor(getResources().getColor(android.R.color.holo_green_light));
+                }else if((mTopCard.getWidth()/2+mTopCard.getX()) < display.getWidth()/3/2){
+                    System.out.println("red");
+                    mTopCard.setBackgroundColor(getResources().getColor(android.R.color.holo_red_light));
+                }
+                else{
+                    mTopCard.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+                }
                 dx = x - mLastTouchX;
                 dy = y - mLastTouchY;
-                if(dx>x){
-                    this.setBackgroundColor(android.R.color.holo_green_light);
-                }
                 if (Math.abs(dx) > mTouchSlop || Math.abs(dy) > mTouchSlop) {
                     mDragging = true;
                 }
@@ -306,6 +319,7 @@ public class CardContainer extends AdapterView<ListAdapter> {
                 if (!mDragging) {
                     return true;
                 }
+                mTopCard.setBackgroundColor(getResources().getColor(android.R.color.transparent));
                 mDragging = false;
                 mActivePointerId = INVALID_POINTER_ID;
                 ValueAnimator animator = ObjectAnimator.ofPropertyValuesHolder(mTopCard,

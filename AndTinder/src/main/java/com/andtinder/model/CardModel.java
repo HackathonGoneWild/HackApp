@@ -26,6 +26,7 @@ public class CardModel {
 	public int	id;
 	private String   title;
 	private String   description;
+	private String 	 rating;
 	private Drawable cardImageDrawable;
 	private Drawable cardLikeImageDrawable;
 	private Drawable cardDislikeImageDrawable;
@@ -50,12 +51,10 @@ public class CardModel {
         void OnClickListener();
     }
 
-	public CardModel() {
-		this(null, null, (Drawable)null);
-	}
 
-	public CardModel(String title, String description, Drawable cardImage) {
+	public CardModel(String title, String description, Drawable cardImage,String rating) {
 		this.title = title;
+		this.rating = rating;
 		this.description = description;
 		this.cardImageDrawable = cardImage;
 	}
@@ -77,6 +76,11 @@ public class CardModel {
 	public String getDescription() {
 		return description;
 	}
+
+	public String getRating() {
+		return rating+"/5";
+	}
+
 
 	public void setDescription(String description) {
 		this.description = description;

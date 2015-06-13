@@ -50,7 +50,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/btn_sep_1"
+        android:textSize="22sp"
         android:textColor="@android:color/holo_red_light"
         android:text="Price"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Rating"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btn_sep_1"
+        android:textSize="20sp"
+        android:id="@+id/rating"/>
 
 </RelativeLayout>

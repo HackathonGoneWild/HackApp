@@ -8,9 +8,15 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.nineoldandroids.animation.Animator;
+
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
@@ -44,7 +50,7 @@ public class CatergoryListAdapter extends ArrayAdapter<String> {
         //textViewItem.setText(objectItem);
         //System.out.println(objectItem.getString("name"));
         final String category = objectItem;
-        ImageView image = (ImageView) convertView.findViewById(R.id.catImage);
+        final ImageView image = (ImageView) convertView.findViewById(R.id.catImage);
         Resources res = mContext.getResources();
             if(category.equals("shirts")){
                     image.setImageDrawable(res.getDrawable(R.drawable.shirt));
@@ -78,6 +84,10 @@ public class CatergoryListAdapter extends ArrayAdapter<String> {
                 mContext.startActivity(view);
             }
         });
+
+        YoYo.with(Techniques.Wobble)
+                .duration(1600)
+                .playOn(image);
 
         return convertView;
 

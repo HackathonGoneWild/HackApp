@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.andtinder.R;
 import com.andtinder.model.CardModel;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 
 public final class SimpleCardStackAdapter extends CardStackAdapter {
 
@@ -26,6 +28,10 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 		((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
 		((TextView) convertView.findViewById(R.id.title)).setText(model.getTitle());
 		((TextView) convertView.findViewById(R.id.price)).setText(model.getDescription());
+		((TextView) convertView.findViewById(R.id.rating)).setText(model.getRating());
+		YoYo.with(Techniques.SlideInUp)
+				.duration(1600)
+				.playOn(convertView.findViewById(R.id.image));
 
 		return convertView;
 	}

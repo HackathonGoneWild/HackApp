@@ -22,26 +22,35 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.andtinder.model.CardModel;
 import com.andtinder.view.CardContainer;
 import com.andtinder.view.SimpleCardStackAdapter;
+import com.nhaarman.listviewanimations.appearance.simple.ScaleInAnimationAdapter;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.shamanland.fab.FloatingActionButton;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends HackathonActivity {
@@ -51,6 +60,9 @@ public class MainActivity extends HackathonActivity {
      */
 	private CardContainer mCardContainer;
 	int id = 0;
+	int i;
+	int f = 9;
+
 //	ProgressBar pb;
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	@Override
@@ -85,33 +97,103 @@ public class MainActivity extends HackathonActivity {
 	private void fetchData(String key){
 
 		final Resources r = getResources();
-
+// start
 		final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(this);
 		Parse.initialize(this, "5RS0RQgQ3O3fOpbjmD0oC9vuFbaCP3IskXl0C1UR", "MsR7b8iDRHQL7wHM5pL0aQ95dnKHQEe0xAveTGdQ");
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Items");
 		query.whereEqualTo("category", key);
+		final List<ParseObject> LikedObject = new ArrayList<ParseObject>();
 		query.findInBackground(new FindCallback<ParseObject>() {
-			public void done(List<ParseObject> items, ParseException e) {
-				if (e == null) {
-					for (int i = 0;i<10;i++) {
+			public void done(final List<ParseObject> items, ParseException e) {
+				// done down;oading
+				if (e == null && f > 0) {
+					for (i = 0;i<10;i++) {
 						Drawable image = LoadImageFromWebOperations(items.get(i).getString("image"));
-						final CardModel card = new CardModel(items.get(i).getString("name"), items.get(i).getString("price"), image);
+						final CardModel card = new CardModel(items.get(i).getString("name"), items.get(i).getString("price"), image, "Rating: "+items.get(i).getString("stars"));
 						card.setId(i);
 						System.out.println(items.get(i).getString("image"));
+						Button learn = (Button) findViewById(R.id.learn);
+						Button save = (Button) findViewById(R.id.done);
+						save.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								GridView grid = new GridView(getApplicationContext());
+								LinearLayout lin = (LinearLayout) findViewById(R.id.lin);
+								grid.setColumnWidth(2);
+								afterAdapter myAdapter = new afterAdapter(MainActivity.this, R.layout.after_select_item, LikedObject);
+								ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(myAdapter);
+								animationAdapter.setAbsListView(grid);
+								grid.setAdapter(animationAdapter);
+								lin.removeAllViews();
+								lin.addView(grid);
+							}
+						});
+						learn.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								try {
+									Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(items.get(f).getString("href")));
+									startActivity(browserIntent);
+								}
+								catch (Exception e){
+
+								}
+							}
+						});
 						card.setOnCardDismissedListener(new CardModel.OnCardDismissedListener() {
 							@Override
 							public void onLike() {
-								Toast.makeText(getApplicationContext(), "Liked!" + card.getId(), Toast.LENGTH_SHORT).show();
+								LikedObject.add(items.get(f));
+
+								if (card.getId() == 9) {
+									for (ParseObject item : LikedObject) {
+										System.out.println(item.get("name") + " is whats left");
+
+									}
+									GridView grid = new GridView(getApplicationContext());
+									LinearLayout lin = (LinearLayout) findViewById(R.id.lin);
+									grid.setColumnWidth(2);
+									afterAdapter myAdapter = new afterAdapter(MainActivity.this, R.layout.after_select_item, LikedObject);
+									ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(myAdapter);
+									animationAdapter.setAbsListView(grid);
+									grid.setAdapter(animationAdapter);
+									lin.removeAllViews();
+									lin.addView(grid);
+								}
+								f--;
+
 							}
 
 							@Override
 							public void onDislike() {
-								Toast.makeText(getApplicationContext(), "Disliked!", Toast.LENGTH_SHORT).show();
+
+								if (card.getId() == 9) {
+									for (ParseObject item : LikedObject ){
+										System.out.println(item.get("name") + " is whats left");
+
+									}
+									Toast.makeText(getApplicationContext(), "Disliked!", Toast.LENGTH_SHORT).show();
+									GridView grid = new GridView(getApplicationContext());
+									LinearLayout lin = (LinearLayout) findViewById(R.id.lin);
+									grid.setColumnWidth(2);
+									LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+											LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+									grid.setLayoutParams(layoutParams);
+									afterAdapter myAdapter = new afterAdapter(MainActivity.this, R.layout.after_select_item, LikedObject);
+									ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(myAdapter);
+									animationAdapter.setAbsListView(grid);
+									grid.setAdapter(animationAdapter);
+									lin.removeAllViews();
+									lin.addView(grid);
+								}
+								f--;
 							}
 						});
 						adapter.add(card);
 					}
 					//	pb.setVisibility(View.INVISIBLE);
+
+
 					mCardContainer.setAdapter(adapter);
 				} else {
 					System.out.println(e);
