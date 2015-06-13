@@ -17,10 +17,12 @@
 
 package com.andtinder.demo;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
@@ -42,7 +44,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends HackathonActivity {
 
     /**
      * This variable is the container that will host our cards
@@ -50,6 +52,7 @@ public class MainActivity extends Activity {
 	private CardContainer mCardContainer;
 	int id = 0;
 //	ProgressBar pb;
+	@TargetApi(Build.VERSION_CODES.KITKAT)
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,9 +61,11 @@ public class MainActivity extends Activity {
 		StrictMode.setThreadPolicy(policy);
 		setContentView(R.layout.mainlayout);
 		//pb = (ProgressBar) findViewById(R.id.loader);
-
+		Intent intent = new Intent(getIntent());
+		String key = intent.getStringExtra("key");
+		System.out.println(key);
 		mCardContainer = (CardContainer) findViewById(R.id.layoutview);
-		fetchData();
+		fetchData(key);
 
 
 
@@ -77,14 +82,14 @@ public class MainActivity extends Activity {
 			return null;
 		}
 	}
-	private void fetchData(){
+	private void fetchData(String key){
 
 		final Resources r = getResources();
 
 		final SimpleCardStackAdapter adapter = new SimpleCardStackAdapter(this);
 		Parse.initialize(this, "5RS0RQgQ3O3fOpbjmD0oC9vuFbaCP3IskXl0C1UR", "MsR7b8iDRHQL7wHM5pL0aQ95dnKHQEe0xAveTGdQ");
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("Items");
-		query.whereEqualTo("category", "laptops");
+		query.whereEqualTo("category", key);
 		query.findInBackground(new FindCallback<ParseObject>() {
 			public void done(List<ParseObject> items, ParseException e) {
 				if (e == null) {

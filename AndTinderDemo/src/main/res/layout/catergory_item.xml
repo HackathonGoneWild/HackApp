@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    style="@style/nowCardStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="200dp">
+
+    <ImageView
+        android:id="@+id/catImage"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       />
+<!--    <ImageView
+        android:background="#66CE93D8"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />-->
+    <TextView
+
+        android:layout_alignParentBottom="true"
+        android:id="@+id/catName"
+        android:gravity="center_horizontal"
+        android:textSize="40sp"
+        android:textColor="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -23,7 +23,6 @@ public final class SimpleCardStackAdapter extends CardStackAdapter {
 			convertView = inflater.inflate(R.layout.std_card_inner, parent, false);
 			assert convertView != null;
 		}
-
 		((ImageView) convertView.findViewById(R.id.image)).setImageDrawable(model.getCardImageDrawable());
 		((TextView) convertView.findViewById(R.id.title)).setText(model.getTitle());
 		((TextView) convertView.findViewById(R.id.price)).setText(model.getDescription());
