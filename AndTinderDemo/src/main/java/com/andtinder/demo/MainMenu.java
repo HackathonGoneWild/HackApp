@@ -7,6 +7,7 @@ import android.widget.ImageView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
+import com.shamanland.fab.FloatingActionButton;
 
 /**
  * Created by tomer on 6/13/15.
@@ -21,7 +22,7 @@ public class MainMenu extends HackathonActivity{
         pin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(),null));
+                startActivity(new Intent(getApplicationContext(),PeerActivity.class));
 
             }
         });
@@ -31,5 +32,6 @@ public class MainMenu extends HackathonActivity{
                 startActivity(new Intent(getApplicationContext(), CategoryPicker.class));
             }
         });
+
     }
 }

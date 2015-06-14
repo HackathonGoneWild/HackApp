@@ -24,13 +24,13 @@ import java.util.List;
 /**
  * Created by tomer on 6/12/15.
  */
-public class afterAdapter extends ArrayAdapter<ParseObject> {
+public class afterAdapterPeer extends ArrayAdapter<ParseObject> {
 
     Context mContext;
     int layoutResourceId;
     List<ParseObject> data = null;
 
-    public afterAdapter(Context mContext, int layoutResourceId, List<ParseObject> data) {
+    public afterAdapterPeer(Context mContext, int layoutResourceId, List<ParseObject> data) {
         super(mContext, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.mContext = mContext;
@@ -38,7 +38,7 @@ public class afterAdapter extends ArrayAdapter<ParseObject> {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView==null){
             // inflate the layout
             LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
@@ -46,42 +46,28 @@ public class afterAdapter extends ArrayAdapter<ParseObject> {
         }
         String name = data.get(position).getString("name");
         String price = data.get(position).getString("price");
-        String rating = data.get(position).getString("stars");
         String image = data.get(position).getString("image");
+        String distance = data.get(position).getString("distance");
+        String description = data.get(position).getString("description");
         final String link = data.get(position).getString("href");
         // get the TextView and then set the text (item name) and tag (item ID) values
         TextView textName = (TextView) convertView.findViewById(R.id.textName);
         TextView textPrice = (TextView) convertView.findViewById(R.id.txtPrice);
-        TextView textRating = (TextView) convertView.findViewById(R.id.txtRating);
+        TextView txtDistance = (TextView) convertView.findViewById(R.id.txtDistance);
         ImageView imageView = (ImageView) convertView.findViewById(R.id.imageView);
         imageView.setImageDrawable(LoadImageFromWebOperations(image));
         textName.setText(name);
-        if(!price.contains("$")) {
-            textPrice.setText(price+"$");
-            RelativeLayout back = (RelativeLayout) convertView.findViewById(R.id.background);
-            back.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    intent.setData(Uri.parse("tel:" + data.get(position).getString("phone")));
-                    mContext.startActivity(intent);
-                }
-            });
-        }
-        else{
-            textPrice.setText(price);
-            RelativeLayout back = (RelativeLayout) convertView.findViewById(R.id.background);
-            back.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-                    mContext.startActivity(browserIntent);
-                }
-            });
-        }
-        textRating.setText(rating);
-
-               //textViewItem.setText(objectItem);
+        textPrice.setText(price+"$");
+        txtDistance.setText(distance);
+        RelativeLayout back = (RelativeLayout) convertView.findViewById(R.id.background);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+                mContext.startActivity(browserIntent);
+            }
+        });
+        //textViewItem.setText(objectItem);
         //System.out.println(objectItem.getString("name"));
         Resources res = mContext.getResources();
 

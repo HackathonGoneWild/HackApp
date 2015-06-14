@@ -3,6 +3,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <uses-sdk
         android:minSdkVersion="16"
         />
@@ -29,5 +31,7 @@
         <activity android:name=".CategoryPicker"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".PeerActivity"
+            android:screenOrientation="portrait"/>
     </application>
 </manifest>

@@ -27,15 +27,26 @@ public class CardModel {
 	private String   title;
 	private String   description;
 	private String 	 rating;
+	private String 	 price;
+	private Number 	distance;
 	private Drawable cardImageDrawable;
 	private Drawable cardLikeImageDrawable;
 	private Drawable cardDislikeImageDrawable;
-
+	private String phone;
     private OnCardDismissedListener mOnCardDismissedListener = null;
 
     private OnClickListener mOnClickListener = null;
 
-    public interface OnCardDismissedListener {
+	public CardModel(String name, String price, Drawable image, String description, Number distance,String phone) {
+		this.title = name;
+		this.price = price;
+		this.description = description;
+		this.cardImageDrawable = image;
+		this.distance = distance;
+		this.phone = phone;
+	}
+
+	public interface OnCardDismissedListener {
         void onLike();
         void onDislike();
     }
@@ -78,9 +89,16 @@ public class CardModel {
 	}
 
 	public String getRating() {
-		return rating+"/5";
+		return rating;
 	}
 
+	public String getPrice(){
+		return this.price;
+	}
+
+	public Number getDistance(){
+		return this.distance;
+	}
 
 	public void setDescription(String description) {
 		this.description = description;
@@ -117,8 +135,10 @@ public class CardModel {
     public OnCardDismissedListener getOnCardDismissedListener() {
        return this.mOnCardDismissedListener;
     }
-
-
+	public String getPhone()
+	{
+		return this.phone;
+	}
     public void setOnClickListener( OnClickListener listener ) {
         this.mOnClickListener = listener;
     }
